@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,6 +39,15 @@ public class User implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
         return Collections.singletonList(authority);
+    }
+
+    public User(String firstName, String lastName, Timestamp timestamp, String email, String password, AppUserRole appUserRole) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.timestamp = timestamp;
+        this.email = email;
+        this.password = password;
+        this.appUserRole = appUserRole;
     }
 
     @Override

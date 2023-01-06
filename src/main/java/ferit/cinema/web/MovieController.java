@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("movie")
+@RequestMapping("api/v1/movie")
 public class MovieController {
 
     private final MovieRepository movieRepository;
@@ -27,7 +27,7 @@ public class MovieController {
     @PostMapping
     public ResponseEntity<Movie> saveMovie(@RequestBody Movie movie){
         Movie savedMovie = movieRepository.save(movie);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedMovie    );
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedMovie);
     }
 
     @GetMapping("/{id}")
