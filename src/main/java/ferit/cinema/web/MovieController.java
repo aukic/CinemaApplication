@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/movie")
+@RequestMapping("api/v1/movies")
 public class MovieController {
 
     private final MovieRepository movieRepository;
@@ -19,7 +19,7 @@ public class MovieController {
         this.movieRepository = movieRepository;
     }
 
-    @GetMapping("/movies")
+    @GetMapping
     public List<Movie> getMovies(){
         return movieRepository.findAll();
     }

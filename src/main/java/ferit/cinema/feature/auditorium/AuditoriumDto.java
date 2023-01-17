@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Data
 public class AuditoriumDto implements Serializable {
-    private final Integer id;
+    private final Long id;
     private final String name;
     private final Integer seatsNo;
 }

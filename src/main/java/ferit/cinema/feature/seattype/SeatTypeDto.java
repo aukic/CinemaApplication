@@ -6,6 +6,6 @@ import java.io.Serializable;
 
 @Data
 public class SeatTypeDto implements Serializable {
-    private final Integer id;
+    private final Long id;
     private final String type;
 }
