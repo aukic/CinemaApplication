@@ -8,4 +8,5 @@ import java.util.List;
 public interface TicketService {
     List<TicketDto> getAllUserReservations(Long userId);
     TicketDto createReservation(ReservationRequest request);
+    TicketDto updateReservation(ReservationRequest request, Long ticketId);
 }

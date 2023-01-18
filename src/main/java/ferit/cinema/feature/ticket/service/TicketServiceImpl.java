@@ -6,13 +6,12 @@ import ferit.cinema.feature.seat.SeatDto;
 import ferit.cinema.feature.seatreserved.SeatReserved;
 import ferit.cinema.feature.seatreserved.SeatReservedRepository;
 import ferit.cinema.feature.ticket.*;
-import ferit.cinema.feature.user.User;
-import ferit.cinema.feature.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -48,6 +47,33 @@ public class TicketServiceImpl implements TicketService{
             seatReservedRepository.save(seatReserved);
         }
         TicketDto ticketDto = ticketDtoMapper.map(ticket);
+        ticketDto.setSeatDto(request.getSeatDto());
+        return ticketDto;
+    }
+
+    @Override
+    public TicketDto updateReservation(ReservationRequest request, Long ticketId) {
+        Optional<Ticket> existingTicket = ticketRepository.findById(ticketId);
+        TicketDto ticketDto = new TicketDto();
+        Ticket ticket = new Ticket();
+        if(existingTicket.isPresent()){
+            List<SeatReserved> seatReserveds = seatReservedRepository.findAllByTicketId(ticketId);
+            for (SeatReserved seatReserved:seatReserveds){
+                seatReservedRepository.delete(seatReserved);
+            }
+            ticket.setId(existingTicket.get().getId());
+            ticket.setPrice(request.getPrice());
+            ticket.setMovieProjection(request.getMovieProjection());
+            ticket.setUser(request.getUser());
+            ticketRepository.save(ticket);
+            for (SeatDto seatDto: request.getSeatDto()) {
+                Seat seat = new Seat(seatDto.getId());
+                SeatReserved seatReserved = new SeatReserved(seat,ticket, request.getMovieProjection());
+                seatReservedRepository.save(seatReserved);
+            }
+            ticketDto = ticketDtoMapper.map(ticket);
+            ticketDto.setSeatDto(request.getSeatDto());
+        }
         return ticketDto;
     }
 }
