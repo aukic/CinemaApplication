@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -15,30 +16,35 @@ public class SeatController {
     private final SeatRepository seatRepository;
     public SeatController(SeatRepository seatRepository) {this.seatRepository = seatRepository;}
 
-    @PostMapping("/seat")
+    @PostMapping
     public ResponseEntity<Seat> saveSeat(@RequestBody Seat seat){
         Seat savedSeat = seatRepository.save(seat);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedSeat);
     }
 
-    @PostMapping
-    public ResponseEntity<List<Seat>> saveSeats(@RequestBody List<Seat> seats){
-        List<Seat> savedSeats = seatRepository.saveAll(seats);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedSeats);
-    }
-
     @GetMapping
     public List<Seat> getSeats(){
-        return seatRepository.findAll();
+        List<Seat> seats;
+        try {
+            seats = seatRepository.findAll();
+        }catch (Exception e){
+            throw new NoSuchElementException();
+        }
+        return seats;
     }
 
-    @GetMapping("/{id}")
-    public Optional<Seat> getSeat(@PathVariable Long id){
-        return seatRepository.findById(id);
+    @GetMapping("/{seatId}")
+    public ResponseEntity<Seat> getSeat(@PathVariable Long seatId){
+        Optional<Seat> seat = seatRepository.findById(seatId);
+        if(seat.isPresent()) {
+            return ResponseEntity.ok(seat.get());
+        }else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @GetMapping("/auditorium/{id}")
-    public Optional<List<Seat>> getSeatsByAuditoriumId(@PathVariable Long id){
-        return Optional.ofNullable(seatRepository.getAllByAuditoriumId(id));
+    @GetMapping("/auditorium/{auditoriumId}")
+    public Optional<List<Seat>> getSeatsByAuditoriumId(@PathVariable Long auditoriumId){
+        return Optional.ofNullable(seatRepository.getAllByAuditoriumId(auditoriumId));
     }
 }

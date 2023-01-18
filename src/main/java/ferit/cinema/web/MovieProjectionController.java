@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/projection")
+@RequestMapping("api/v1/projections")
 public class MovieProjectionController {
     private final MovieProjectionRepository movieProjectionRepository;
     private final MovieProjectionServiceImpl movieProjectionService;
@@ -21,9 +22,15 @@ public class MovieProjectionController {
         this.movieProjectionService = movieProjectionService;
     }
 
-    @GetMapping("/{id}")
-    public Optional<MovieProjection> getMovieProjectionById(@PathVariable Long id){
-        return movieProjectionRepository.findById(id);
+    @GetMapping("/{projectionId}")
+    public Optional<MovieProjection> getMovieProjectionById(@PathVariable Long projectionId){
+        Optional<MovieProjection> movieProjection;
+        try {
+            movieProjection = movieProjectionRepository.findById(projectionId);
+        } catch (Exception e){
+            throw new NoSuchElementException();
+        }
+        return movieProjection;
     }
 
     @PostMapping
@@ -32,13 +39,7 @@ public class MovieProjectionController {
         return ResponseEntity.ok().body(savedMovieProjection);
     }
 
-    @PostMapping("/projections")
-    public ResponseEntity<List<MovieProjection>> saveMovieProjections(@RequestBody List<MovieProjection> movieProjections){
-        List<MovieProjection> savedMovieProjections = movieProjectionRepository.saveAll(movieProjections);
-        return ResponseEntity.ok().body(savedMovieProjections);
-    }
-
-    @GetMapping("/projections")
+    @GetMapping
     public List<MovieProjectionDto> getActiveProjections(){
         List<MovieProjectionDto> movieProjectionDtos = new ArrayList<>();
         try{

@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -21,7 +23,13 @@ public class MovieController {
 
     @GetMapping
     public List<Movie> getMovies(){
-        return movieRepository.findAll();
+        List<Movie> movies;
+        try {
+            movies = movieRepository.findAll();
+        } catch (Exception e){
+            throw new NoSuchElementException();
+        }
+        return movies;
     }
 
     @PostMapping
