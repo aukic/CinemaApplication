@@ -1,7 +1,9 @@
 package ferit.cinema.web;
 
 import ferit.cinema.feature.movie.Movie;
+import ferit.cinema.feature.movie.MovieDto;
 import ferit.cinema.feature.movie.MovieRepository;
+import ferit.cinema.feature.movie.service.MovieServiceImpl;
 import ferit.cinema.feature.review.ReviewDto;
 import ferit.cinema.feature.review.ReviewRequest;
 import ferit.cinema.feature.review.service.ReviewServiceImpl;
@@ -17,19 +19,21 @@ import java.util.Optional;
 @RequestMapping("api/v1/movies")
 public class MovieController {
 
+    private final MovieServiceImpl movieService;
     private final MovieRepository movieRepository;
     private final ReviewServiceImpl reviewService;
 
-    public MovieController(MovieRepository movieRepository, ReviewServiceImpl reviewService) {
+    public MovieController(MovieServiceImpl movieService, MovieRepository movieRepository, ReviewServiceImpl reviewService) {
+        this.movieService = movieService;
         this.movieRepository = movieRepository;
         this.reviewService = reviewService;
     }
 
     @GetMapping
-    public List<Movie> getMovies(){
-        List<Movie> movies;
+    public List<MovieDto> getMovies(){
+        List<MovieDto> movies;
         try {
-            movies = movieRepository.findAll();
+            movies = movieService.getAllMovies();
         } catch (Exception e){
             throw new NoSuchElementException();
         }

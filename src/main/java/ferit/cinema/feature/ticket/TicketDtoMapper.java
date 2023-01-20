@@ -3,8 +3,7 @@ package ferit.cinema.feature.ticket;
 import ferit.cinema.feature.seat.SeatDto;
 import ferit.cinema.feature.seatreserved.SeatReserved;
 import ferit.cinema.feature.seatreserved.SeatReservedRepository;
-import ferit.cinema.feature.user.User;
-import ferit.cinema.feature.user.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

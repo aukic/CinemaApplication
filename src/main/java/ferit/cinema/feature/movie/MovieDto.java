@@ -1,13 +1,17 @@
 package ferit.cinema.feature.movie;
 
+import ferit.cinema.feature.review.ReviewDto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class MovieDto implements Serializable {
-    private final Long id;
-    private final String title;
-    private final String description;
-    private final Integer duration_min;
+    private Long id;
+    private String title;
+    private String description;
+    private Integer duration_min;
+    private Double currentRating;
+    private List<ReviewDto> reviews;
 }
