@@ -2,11 +2,13 @@ package ferit.cinema.web;
 
 import ferit.cinema.feature.movie.Movie;
 import ferit.cinema.feature.movie.MovieRepository;
+import ferit.cinema.feature.review.ReviewDto;
+import ferit.cinema.feature.review.ReviewRequest;
+import ferit.cinema.feature.review.service.ReviewServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -16,9 +18,11 @@ import java.util.Optional;
 public class MovieController {
 
     private final MovieRepository movieRepository;
+    private final ReviewServiceImpl reviewService;
 
-    public MovieController(MovieRepository movieRepository) {
+    public MovieController(MovieRepository movieRepository, ReviewServiceImpl reviewService) {
         this.movieRepository = movieRepository;
+        this.reviewService = reviewService;
     }
 
     @GetMapping
@@ -69,5 +73,11 @@ public class MovieController {
         }else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/{movieId}/review")
+    public ResponseEntity<ReviewDto> reviewMovie(@PathVariable Long movieId, @RequestBody ReviewRequest request){
+        ReviewDto reviewDto = reviewService.saveReview(movieId, request);
+        return ResponseEntity.ok(reviewDto);
     }
 }
