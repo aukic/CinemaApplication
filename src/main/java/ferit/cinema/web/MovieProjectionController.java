@@ -43,7 +43,18 @@ public class MovieProjectionController {
     public List<MovieProjectionDto> getActiveProjections(){
         List<MovieProjectionDto> movieProjectionDtos = new ArrayList<>();
         try{
-            movieProjectionDtos = movieProjectionService.createMovieProjectionDto();
+            movieProjectionDtos = movieProjectionService.getActiveProjections();
+        } catch(Exception e){
+            throw new IllegalStateException();
+        }
+        return movieProjectionDtos;
+    }
+
+    @GetMapping("/movie/{movieId}")
+    public List<MovieProjectionDto> getProjectionsByMovieId(@PathVariable Long movieId){
+        List<MovieProjectionDto> movieProjectionDtos = new ArrayList<>();
+        try{
+            movieProjectionDtos = movieProjectionService.getActiveProjectionsByMovie(movieId);
         } catch(Exception e){
             throw new IllegalStateException();
         }
