@@ -5,7 +5,7 @@ import ferit.cinema.feature.user.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Data
 @Entity

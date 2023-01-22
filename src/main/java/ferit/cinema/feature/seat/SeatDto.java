@@ -1,9 +1,6 @@
 package ferit.cinema.feature.seat;
 
-import ferit.cinema.feature.auditorium.Auditorium;
-import ferit.cinema.feature.auditorium.AuditoriumDto;
 import ferit.cinema.feature.seattype.SeatType;
-import ferit.cinema.feature.seattype.SeatTypeDto;
 import lombok.Data;
 
 import java.io.Serializable;

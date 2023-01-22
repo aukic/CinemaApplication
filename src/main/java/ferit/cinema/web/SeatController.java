@@ -17,9 +17,9 @@ public class SeatController {
     public SeatController(SeatRepository seatRepository) {this.seatRepository = seatRepository;}
 
     @PostMapping
-    public ResponseEntity<Seat> saveSeat(@RequestBody Seat seat){
-        Seat savedSeat = seatRepository.save(seat);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedSeat);
+    public ResponseEntity<List<Seat>> saveSeats(@RequestBody List<Seat> seats){
+        List<Seat> savedSeats = seatRepository.saveAll(seats);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedSeats);
     }
 
     @GetMapping

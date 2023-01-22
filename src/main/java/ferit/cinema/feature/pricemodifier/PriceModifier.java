@@ -3,7 +3,7 @@ package ferit.cinema.feature.pricemodifier;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Getter

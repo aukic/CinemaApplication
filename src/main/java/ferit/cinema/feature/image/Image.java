@@ -4,7 +4,7 @@ import ferit.cinema.feature.movie.Movie;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 
 @Data
