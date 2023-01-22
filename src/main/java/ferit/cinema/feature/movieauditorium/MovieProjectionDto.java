@@ -2,6 +2,7 @@ package ferit.cinema.feature.movieauditorium;
 
 import ferit.cinema.feature.auditorium.Auditorium;
 import ferit.cinema.feature.movie.Movie;
+import ferit.cinema.feature.movie.MovieDto;
 import ferit.cinema.feature.seat.SeatDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MovieProjectionDto implements Serializable {
     private Long id;
-    private Movie movie;
+    private MovieDto movie;
     private Auditorium auditorium;
     private LocalDateTime screeningTime;
     private List<SeatDto> seats;
