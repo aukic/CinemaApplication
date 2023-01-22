@@ -1,5 +1,6 @@
 package ferit.cinema.feature.movie;
 
+import ferit.cinema.feature.image.ImageDto;
 import ferit.cinema.feature.review.ReviewDto;
 import lombok.Data;
 
@@ -14,4 +15,5 @@ public class MovieDto implements Serializable {
     private Integer duration_min;
     private Double currentRating;
     private List<ReviewDto> reviews;
+    private List<ImageDto> images;
 }
