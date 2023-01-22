@@ -46,7 +46,7 @@ public class ReservationController {
     }
 
     @PutMapping("/ticket/{ticketId}")
-    public ResponseEntity<TicketDto> updateMovie(@PathVariable Long ticketId, @RequestBody ReservationRequest request){
+    public ResponseEntity<TicketDto> updateReservation(@PathVariable Long ticketId, @RequestBody ReservationRequest request){
         TicketDto ticketDto = null;
         try {
             ticketDto = ticketService.updateReservation(request, ticketId);
