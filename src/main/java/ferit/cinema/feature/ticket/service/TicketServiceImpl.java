@@ -1,11 +1,13 @@
 package ferit.cinema.feature.ticket.service;
 
 import ferit.cinema.feature.movieauditorium.MovieProjection;
-import ferit.cinema.feature.seat.Seat;
-import ferit.cinema.feature.seat.SeatDto;
+import ferit.cinema.feature.movieauditorium.MovieProjectionRepository;
+import ferit.cinema.feature.seat.*;
 import ferit.cinema.feature.seatreserved.SeatReserved;
 import ferit.cinema.feature.seatreserved.SeatReservedRepository;
 import ferit.cinema.feature.ticket.*;
+import ferit.cinema.feature.user.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +17,15 @@ import java.util.Optional;
 
 
 @Service
+@RequiredArgsConstructor
 public class TicketServiceImpl implements TicketService{
-    @Autowired
-    private TicketRepository ticketRepository;
-    @Autowired
-    private TicketDtoMapper ticketDtoMapper;
-    @Autowired
-    private SeatReservedRepository seatReservedRepository;
+    private final TicketRepository ticketRepository;
+    private final TicketDtoMapper ticketDtoMapper;
+    private final SeatReservedRepository seatReservedRepository;
+    private final MovieProjectionRepository movieProjectionRepository;
+    private final UserRepository userRepository;
+    private final SeatRepository seatRepository;
+    private final SeatDtoMapper seatDtoMapper;
     @Override
     public List<TicketDto> getAllUserReservations(Long userId) {
         List<Ticket> tickets = ticketRepository.findAllByUserId(userId);
@@ -36,44 +40,44 @@ public class TicketServiceImpl implements TicketService{
     @Override
     public TicketDto createReservation(ReservationRequest request) {
         Ticket ticket = new Ticket();
-        MovieProjection movieProjection = request.getMovieProjection();
+        MovieProjection movieProjection = movieProjectionRepository.findById(request.getMovieProjectionId()).orElse(null);
         ticket.setPrice(request.getPrice());
         ticket.setMovieProjection(movieProjection);
-        ticket.setUser(request.getUser());
+        ticket.setUser(userRepository.findById(request.getUserId()).orElse(null));
         ticketRepository.save(ticket);
-        for (SeatDto seatDto: request.getSeatDto()) {
-            Seat seat = new Seat(seatDto.getId());
-            SeatReserved seatReserved = new SeatReserved(seat,ticket,movieProjection);
-            seatReservedRepository.save(seatReserved);
-        }
-        TicketDto ticketDto = ticketDtoMapper.map(ticket);
-        ticketDto.setSeatDto(request.getSeatDto());
-        return ticketDto;
+        return processSeats(request, ticket, movieProjection);
     }
 
     @Override
     public TicketDto updateReservation(ReservationRequest request, Long ticketId) {
         Optional<Ticket> existingTicket = ticketRepository.findById(ticketId);
-        TicketDto ticketDto = new TicketDto();
-        Ticket ticket = new Ticket();
         if(existingTicket.isPresent()){
             List<SeatReserved> seatReserveds = seatReservedRepository.findAllByTicketId(ticketId);
-            for (SeatReserved seatReserved:seatReserveds){
-                seatReservedRepository.delete(seatReserved);
-            }
-            ticket.setId(existingTicket.get().getId());
+            seatReservedRepository.deleteAll(seatReserveds);
+            Ticket ticket = existingTicket.get();
             ticket.setPrice(request.getPrice());
-            ticket.setMovieProjection(request.getMovieProjection());
-            ticket.setUser(request.getUser());
+            MovieProjection movieProjection = movieProjectionRepository.findById(request.getMovieProjectionId()).orElse(null);
+            ticket.setMovieProjection(movieProjection);
+            ticket.setUser(userRepository.findById(request.getUserId()).orElse(null));
             ticketRepository.save(ticket);
-            for (SeatDto seatDto: request.getSeatDto()) {
-                Seat seat = new Seat(seatDto.getId());
-                SeatReserved seatReserved = new SeatReserved(seat,ticket, request.getMovieProjection());
-                seatReservedRepository.save(seatReserved);
-            }
-            ticketDto = ticketDtoMapper.map(ticket);
-            ticketDto.setSeatDto(request.getSeatDto());
+            return processSeats(request, ticket, movieProjection);
         }
+        return new TicketDto();
+    }
+
+    private TicketDto processSeats(ReservationRequest request, Ticket ticket, MovieProjection movieProjection) {
+        List<SeatDto> seatDtos = new ArrayList<>();
+        for (SeatRequestDto seatRequestDto: request.getSeats()) {
+            Seat seat = seatRepository.findByAuditoriumIdAndRowAndNumber(request.getMovieProjectionId(), seatRequestDto.getRow(), seatRequestDto.getNumber());
+            SeatReserved seatReserved = new SeatReserved(seat,ticket, movieProjection);
+            seatReservedRepository.save(seatReserved);
+            SeatDto seatDto = seatDtoMapper.map(seat);
+            seatDto.setReserved(1);
+            seatDtos.add(seatDto);
+        }
+        TicketDto ticketDto = ticketDtoMapper.map(ticket);
+        ticketDto.setSeatDto(seatDtos);
         return ticketDto;
     }
+
 }
