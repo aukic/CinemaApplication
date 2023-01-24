@@ -11,4 +11,5 @@ public class UserDto implements Serializable {
     private String firstName;
     private String lastName;
     private String email;
+    private Double loyaltyPoints;
 }

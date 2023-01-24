@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/seats")
+@RequestMapping("/api/v1/seats")
 public class SeatController {
     private final SeatRepository seatRepository;
     public SeatController(SeatRepository seatRepository) {this.seatRepository = seatRepository;}

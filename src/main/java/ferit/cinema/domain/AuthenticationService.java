@@ -36,7 +36,8 @@ public class AuthenticationService {
                 new Timestamp(System.currentTimeMillis()),
                 request.getEmail(),
                 request.getPassword(),
-                AppUserRole.USER
+                AppUserRole.USER,
+                0d
         );
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);

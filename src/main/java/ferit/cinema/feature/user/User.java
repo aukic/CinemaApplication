@@ -29,6 +29,7 @@ public class User implements UserDetails{
     private Timestamp timestamp;
     private String email;
     private String password;
+    private Double loyaltyPoints;
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
     private Boolean locked = false;
@@ -40,13 +41,14 @@ public class User implements UserDetails{
         return Collections.singletonList(authority);
     }
 
-    public User(String firstName, String lastName, Timestamp timestamp, String email, String password, AppUserRole appUserRole) {
+    public User(String firstName, String lastName, Timestamp timestamp, String email, String password, AppUserRole appUserRole, Double loyaltyPoints) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.timestamp = timestamp;
         this.email = email;
         this.password = password;
         this.appUserRole = appUserRole;
+        this.loyaltyPoints = loyaltyPoints;
     }
 
     @Override

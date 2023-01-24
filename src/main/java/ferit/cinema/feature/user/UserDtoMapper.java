@@ -10,6 +10,7 @@ public class UserDtoMapper {
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
+        userDto.setLoyaltyPoints(user.getLoyaltyPoints());
         return userDto;
     }
 }
