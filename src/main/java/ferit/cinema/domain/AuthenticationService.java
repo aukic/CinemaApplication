@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -21,6 +22,7 @@ public class AuthenticationService {
     private final EmailValidator emailValidator;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
     public AuthenticationResponse register(RegistrationRequest request){
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if(!isValidEmail){
@@ -30,12 +32,13 @@ public class AuthenticationService {
         if(!Objects.isNull(existingUser)){
             throw new IllegalStateException("Email is taken!");
         }
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
         var user = new User(
                 request.getFirstName(),
                 request.getLastName(),
                 new Timestamp(System.currentTimeMillis()),
                 request.getEmail(),
-                request.getPassword(),
+                encodedPassword,
                 AppUserRole.USER,
                 0d
         );
