@@ -6,9 +6,11 @@ import ferit.cinema.feature.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 
 @Service
@@ -23,6 +25,10 @@ public class AuthenticationService {
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if(!isValidEmail){
             throw new IllegalStateException("Email is not valid");
+        }
+        User existingUser = userRepository.findByEmail(request.getEmail()).orElse(null);
+        if(!Objects.isNull(existingUser)){
+            throw new IllegalStateException("Email is taken!");
         }
         var user = new User(
                 request.getFirstName(),
