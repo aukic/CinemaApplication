@@ -6,11 +6,14 @@ import ferit.cinema.feature.seat.*;
 import ferit.cinema.feature.seatreserved.SeatReserved;
 import ferit.cinema.feature.seatreserved.SeatReservedRepository;
 import ferit.cinema.feature.ticket.*;
+import ferit.cinema.feature.user.User;
 import ferit.cinema.feature.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,8 +46,11 @@ public class TicketServiceImpl implements TicketService{
         MovieProjection movieProjection = movieProjectionRepository.findById(request.getMovieProjectionId()).orElse(null);
         ticket.setPrice(request.getPrice());
         ticket.setMovieProjection(movieProjection);
-        ticket.setUser(userRepository.findById(request.getUserId()).orElse(null));
+        User user = userRepository.findById(request.getUserId()).orElse(null);
+        ticket.setUser(user);
         ticketRepository.save(ticket);
+        Double loyaltyPoints = request.getPrice().divide(BigDecimal.valueOf(10)).setScale(2, RoundingMode.HALF_EVEN).doubleValue() ;
+        userRepository.updateLoyaltyPoints(loyaltyPoints, user.getId());
         return processSeats(request, ticket, movieProjection);
     }
 
