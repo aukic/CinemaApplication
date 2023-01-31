@@ -1,14 +1,10 @@
 package ferit.cinema.feature.movie;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
-
+import lombok.Data;
 import java.sql.Timestamp;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "Movie")
 public class Movie {
@@ -29,4 +25,7 @@ public class Movie {
 
     @Column(name = "timestamp")
     private Timestamp timestamp;
+
+    @Column(name = "trailer")
+    private String trailer;
 }

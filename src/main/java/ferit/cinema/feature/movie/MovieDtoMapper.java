@@ -42,6 +42,7 @@ public class MovieDtoMapper {
         movieDto.setImages(imageDtos);
         movieDto.setCurrentRating(rating);
         movieDto.setReviews(reviewDtos);
+        movieDto.setTrailer(movie.getTrailer());
         return movieDto;
     }
 

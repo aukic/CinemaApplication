@@ -16,4 +16,5 @@ public class MovieDto implements Serializable {
     private Double currentRating;
     private List<ReviewDto> reviews;
     private List<ImageDto> images;
+    private String trailer;
 }
