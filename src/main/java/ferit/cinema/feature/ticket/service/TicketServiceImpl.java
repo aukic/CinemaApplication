@@ -74,7 +74,7 @@ public class TicketServiceImpl implements TicketService{
     private TicketDto processSeats(ReservationRequest request, Ticket ticket, MovieProjection movieProjection) {
         List<SeatDto> seatDtos = new ArrayList<>();
         for (SeatRequestDto seatRequestDto: request.getSeats()) {
-            Seat seat = seatRepository.findByAuditoriumIdAndRowAndNumber(request.getMovieProjectionId(), seatRequestDto.getRow(), seatRequestDto.getNumber());
+            Seat seat = seatRepository.findByAuditoriumIdAndRowAndNumber(movieProjection.getAuditorium().getId(), seatRequestDto.getRow(), seatRequestDto.getNumber());
             SeatReserved seatReserved = new SeatReserved(seat,ticket, movieProjection);
             seatReservedRepository.save(seatReserved);
             SeatDto seatDto = seatDtoMapper.map(seat);
