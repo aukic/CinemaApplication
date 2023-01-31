@@ -10,5 +10,6 @@ public class ReservationRequest {
     private Long movieProjectionId;
     private BigDecimal price;
     private Long userId;
+    private Double loyaltyPoints;
     private List<SeatRequestDto> seats;
 }

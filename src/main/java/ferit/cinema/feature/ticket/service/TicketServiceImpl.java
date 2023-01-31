@@ -49,7 +49,7 @@ public class TicketServiceImpl implements TicketService{
         User user = userRepository.findById(request.getUserId()).orElse(null);
         ticket.setUser(user);
         ticketRepository.save(ticket);
-        Double loyaltyPoints = request.getPrice().divide(BigDecimal.valueOf(10)).setScale(2, RoundingMode.HALF_EVEN).doubleValue() ;
+        Double loyaltyPoints = request.getPrice().divide(BigDecimal.valueOf(10)).setScale(2, RoundingMode.HALF_EVEN).doubleValue() - request.getLoyaltyPoints();
         userRepository.updateLoyaltyPoints(loyaltyPoints, user.getId());
         return processSeats(request, ticket, movieProjection);
     }
