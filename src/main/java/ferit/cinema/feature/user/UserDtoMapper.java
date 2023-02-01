@@ -11,6 +11,7 @@ public class UserDtoMapper {
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
         userDto.setLoyaltyPoints(user.getLoyaltyPoints());
+        userDto.setRole(user.getAppUserRole());
         return userDto;
     }
 }

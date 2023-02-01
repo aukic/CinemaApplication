@@ -12,4 +12,5 @@ public class UserDto implements Serializable {
     private String lastName;
     private String email;
     private Double loyaltyPoints;
+    private AppUserRole role;
 }
