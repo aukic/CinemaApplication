@@ -3,6 +3,7 @@ package ferit.cinema.web;
 import ferit.cinema.feature.movie.Movie;
 import ferit.cinema.feature.movie.MovieDto;
 import ferit.cinema.feature.movie.MovieRepository;
+import ferit.cinema.feature.movie.MovieRequestDto;
 import ferit.cinema.feature.movie.service.MovieServiceImpl;
 import ferit.cinema.feature.review.ReviewDto;
 import ferit.cinema.feature.review.ReviewRequest;
@@ -41,19 +42,25 @@ public class MovieController {
     }
 
     @PostMapping
-    public ResponseEntity<Movie> saveMovie(@RequestBody Movie movie){
-        Movie savedMovie = movieRepository.save(movie);
+    public ResponseEntity<MovieRequestDto> saveMovie(@RequestBody MovieRequestDto movie){
+        MovieRequestDto savedMovie = new MovieRequestDto();
+        try{
+            savedMovie = movieService.saveMovie(movie);
+        }catch (NoSuchElementException e){
+            throw e;
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(savedMovie);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
-        Optional<Movie> movie = movieRepository.findById(id);
-        if (movie.isPresent()) {
-            return ResponseEntity.ok(movie.get());
-        } else {
-            return ResponseEntity.notFound().build();
+    public MovieDto getMovieById(@PathVariable Long id) {
+        MovieDto dto = new MovieDto();
+        try {
+            dto = movieService.getMovieById(id);
+        } catch (Exception e){
+            throw new NoSuchElementException();
         }
+        return dto;
     }
 
     @PutMapping("/{id}")
