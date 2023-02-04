@@ -6,6 +6,7 @@ import ferit.cinema.feature.ticket.Ticket;
 import ferit.cinema.feature.ticket.TicketDto;
 import ferit.cinema.feature.ticket.TicketRepository;
 import ferit.cinema.feature.ticket.service.TicketServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,14 +16,20 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/reservations")
+@RequiredArgsConstructor
 public class ReservationController {
     private final TicketServiceImpl ticketService;
-    private final TicketRepository ticketRepository;
-    public ReservationController(TicketServiceImpl ticketService, TicketRepository ticketRepository) {
-        this.ticketService = ticketService;
-        this.ticketRepository = ticketRepository;
-    }
 
+    @GetMapping
+    public List<TicketDto> getAllReservations(){
+        List<TicketDto> ticketDtos = new ArrayList<>();
+        try{
+            ticketDtos = ticketService.findAllReservations();
+        }catch (IllegalStateException e){
+            throw new IllegalStateException();
+        }
+        return ticketDtos;
+    }
     @GetMapping("/{userId}")
     public List<TicketDto> getUserReservations(@PathVariable Long userId){
         List<TicketDto> ticketDtos = new ArrayList<>();

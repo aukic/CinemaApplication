@@ -71,6 +71,17 @@ public class TicketServiceImpl implements TicketService{
         return new TicketDto();
     }
 
+    @Override
+    public List<TicketDto> findAllReservations() {
+        List<Ticket> tickets = ticketRepository.findAll();
+        List<TicketDto> ticketDtos = new ArrayList<>();
+        for (Ticket ticket: tickets) {
+            TicketDto ticketDto = ticketDtoMapper.map(ticket);
+            ticketDtos.add(ticketDto);
+        }
+        return ticketDtos;
+    }
+
     private TicketDto processSeats(ReservationRequest request, Ticket ticket, MovieProjection movieProjection) {
         List<SeatDto> seatDtos = new ArrayList<>();
         for (SeatRequestDto seatRequestDto: request.getSeats()) {
@@ -85,5 +96,6 @@ public class TicketServiceImpl implements TicketService{
         ticketDto.setSeatDto(seatDtos);
         return ticketDto;
     }
+
 
 }

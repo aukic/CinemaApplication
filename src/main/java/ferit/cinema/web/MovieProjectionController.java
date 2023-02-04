@@ -3,6 +3,7 @@ package ferit.cinema.web;
 import ferit.cinema.feature.movieauditorium.MovieProjection;
 import ferit.cinema.feature.movieauditorium.MovieProjectionDto;
 import ferit.cinema.feature.movieauditorium.MovieProjectionRepository;
+import ferit.cinema.feature.movieauditorium.MovieProjectionRequest;
 import ferit.cinema.feature.movieauditorium.service.MovieProjectionServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +35,8 @@ public class MovieProjectionController {
     }
 
     @PostMapping
-    public ResponseEntity<MovieProjection> saveMovieProjection(@RequestBody MovieProjection movieProjection){
-        MovieProjection savedMovieProjection = movieProjectionRepository.save(movieProjection);
+    public ResponseEntity<MovieProjection> saveMovieProjection(@RequestBody MovieProjectionRequest request){
+        MovieProjection savedMovieProjection = movieProjectionService.saveMovieProjection(request);
         return ResponseEntity.ok().body(savedMovieProjection);
     }
 

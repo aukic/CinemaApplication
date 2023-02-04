@@ -1,9 +1,10 @@
 package ferit.cinema.feature.movieauditorium.service;
 
-import ferit.cinema.feature.movieauditorium.MovieProjection;
-import ferit.cinema.feature.movieauditorium.MovieProjectionDto;
-import ferit.cinema.feature.movieauditorium.MovieProjectionDtoMapper;
-import ferit.cinema.feature.movieauditorium.MovieProjectionRepository;
+import ferit.cinema.feature.auditorium.Auditorium;
+import ferit.cinema.feature.auditorium.AuditoriumRepository;
+import ferit.cinema.feature.movie.Movie;
+import ferit.cinema.feature.movie.MovieRepository;
+import ferit.cinema.feature.movieauditorium.*;
 import ferit.cinema.feature.pricemodifier.PriceModifier;
 import ferit.cinema.feature.pricemodifier.PriceModifierRepository;
 import ferit.cinema.feature.seat.Seat;
@@ -31,6 +32,8 @@ public class MovieProjectionServiceImpl implements MovieProjectionService{
     private final SeatDtoMapper seatDtoMapper;
     private final SeatReservedRepository seatReservedRepository;
     private final MovieProjectionDtoMapper movieProjectionDtoMapper;
+    private final MovieRepository movieRepository;
+    private final AuditoriumRepository auditoriumRepository;
     @Override
     public List<MovieProjectionDto> getActiveProjections() {
         return movieProjectionRepository.getAllByScreeningTimeIsAfterNow().stream()
@@ -66,5 +69,17 @@ public class MovieProjectionServiceImpl implements MovieProjectionService{
         }else {
             return false;
         }
+    }
+
+    @Override
+    public MovieProjection saveMovieProjection(MovieProjectionRequest request) {
+        MovieProjection movieProjection = new MovieProjection();
+        Movie movie = movieRepository.findById(request.getMovieId()).orElse(null);
+        Auditorium auditorium = auditoriumRepository.findById(request.getAuditoriumId()).orElse(null);
+        movieProjection.setMovie(movie);
+        movieProjection.setAuditorium(auditorium);
+        movieProjection.setScreeningTime(request.getScreeningTime());
+        movieProjectionRepository.save(movieProjection);
+        return movieProjection;
     }
 }
