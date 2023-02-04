@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/projections")
+@CrossOrigin
 public class MovieProjectionController {
     private final MovieProjectionRepository movieProjectionRepository;
     private final MovieProjectionServiceImpl movieProjectionService;

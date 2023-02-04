@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/seats")
+@CrossOrigin
 public class SeatController {
     private final SeatRepository seatRepository;
     public SeatController(SeatRepository seatRepository) {this.seatRepository = seatRepository;}

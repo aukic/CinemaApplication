@@ -3,6 +3,7 @@ package ferit.cinema.feature.ticket;
 import ferit.cinema.feature.movieauditorium.MovieProjection;
 import ferit.cinema.feature.seat.SeatDto;
 import ferit.cinema.feature.user.User;
+import ferit.cinema.feature.user.UserDto;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,4 +16,5 @@ public class TicketDto implements Serializable {
     private MovieProjection movieProjection;
     private BigDecimal price;
     private List<SeatDto> seatDto;
+    private UserDto user;
 }
