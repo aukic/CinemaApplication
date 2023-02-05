@@ -48,7 +48,7 @@ public class ReservationController {
         try {
             savedTicket = ticketService.createReservation(request);
         }catch (IllegalStateException e){
-
+            throw e;
         }
         return ResponseEntity.ok().body(savedTicket);
     }

@@ -48,10 +48,14 @@ public class TicketServiceImpl implements TicketService{
         ticket.setMovieProjection(movieProjection);
         User user = userRepository.findById(request.getUserId()).orElse(null);
         ticket.setUser(user);
-        ticketRepository.save(ticket);
-        Double loyaltyPoints = request.getPrice().divide(BigDecimal.valueOf(10)).setScale(2, RoundingMode.HALF_EVEN).doubleValue() - request.getLoyaltyPoints();
-        userRepository.updateLoyaltyPoints(loyaltyPoints, user.getId());
-        return processSeats(request, ticket, movieProjection);
+        if(user.getLoyaltyPoints() < request.getLoyaltyPoints()){
+            throw new IllegalStateException("User does not have enough loyalty points!");
+        }else{
+            ticketRepository.save(ticket);
+            Double loyaltyPoints = request.getPrice().divide(BigDecimal.valueOf(10)).setScale(2, RoundingMode.HALF_EVEN).doubleValue() - request.getLoyaltyPoints();
+            userRepository.updateLoyaltyPoints(loyaltyPoints, user.getId());
+            return processSeats(request, ticket, movieProjection);
+        }
     }
 
     @Override
